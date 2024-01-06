@@ -1,373 +1,117 @@
-﻿
-using System;
-using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.Transactions;
-using Players;
-using Weapons;
-using Dungeons;
-using Enemies;
+﻿using Legend_of_Boog.Models.Characters;
+using Legend_of_Boog.Models.Layout;
+using Legend_of_Boog.Services;
 
+var input = new InputService();
 
+var player = new Player("");
 
-// function for displaying class selection
-void SelectClass()
+// POTION VARIABLES
+int HealthPotions = 3;
+int ManaPotions = 3;
+var playerInput = String.Empty;
+var isValid = true;
+var playerClasses = GameService.GetPlayerClasses();
+
+do
 {
-
-    Console.WriteLine("                          ~ Select Your Calss ~\n ");
-
-    Console.WriteLine("(1)");
-    Console.WriteLine("###########################################################################");
-    Console.WriteLine("| Cheese Wiz: a mystical clan of enchanted cheese beings imbued with the  |");
-    Console.WriteLine("| ancient essence of magic itself. These ethereal entities possess the    |");
-    Console.WriteLine("| extraordinary power to infuse ordinary cheese with mystical energies,   |");
-    Console.WriteLine("| granting them the authority to manipulate and command cheese in their   |");
-    Console.WriteLine("| battles against adversaries.                                            |");
-    Console.WriteLine("###########################################################################");
-
-    Console.WriteLine("(2)");
-    Console.WriteLine("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-    Console.WriteLine("| Beast Blade: These warriors combine the primal instincts of a druid     |");
-    Console.WriteLine("| with the combat expertise of a warrior. This unique class taps into the |");
-    Console.WriteLine("| untamed power of the wilderness, allowing players to partially          |");
-    Console.WriteLine("| transform into a beastly form during combat, enhancing their strength   |");
-    Console.WriteLine("| and unleashing furious attacks with their blades.                       |");
-    Console.WriteLine("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-
-    Console.WriteLine("(3)");
-    Console.WriteLine("***************************************************************************");
-    Console.WriteLine("| Prismancer Rogue: A cunning and agile specialist, wielding the          |");
-    Console.WriteLine("| arcane arts of light manipulation and crystallization. These dexterous  |");
-    Console.WriteLine("| adventurers blend the finesse of a rogue with the mystical abilities    |");
-    Console.WriteLine("| of a Prismancer, enabling them to transform into reflective mirrors and |");
-    Console.WriteLine("| conjure bows and daggers made from enchanted gem shards.                |");
-    Console.WriteLine("***************************************************************************");
-
-
-}
-
-// function for pressing E to continue
-void Continue()
-{
-    String input = "";
-    Console.Write("Type (E) to Continue\n");
-    Console.Write(":");
-    input = Console.ReadLine();
-    while (validateInput(input, inputMatcher: "e") == false)
-    {
-        Console.Clear();
-        Header();
-        Console.Write("Type (E) to Continue\n");
-        Console.Write(":");
-        input = Console.ReadLine();
-   
-    }
-    Console.Clear();
-}
-
-// function for checking for valid input
-bool validateInput(string input, int minLength = 1, int maxLength = 999, string inputMatcher = "", string inputMatcher2 = "", string inputMatcher3 = "", bool intCheck = false)
-{
-    bool valid = true;
-
-    if (input.Length > maxLength)
-    {
-        valid = false;
-    }
-
-    if (input.Length < minLength)
-    {
-        valid = false;
-    }
-
-    if (inputMatcher != "" && input.ToLower() != inputMatcher.ToLower())
-    {
-        valid = false;
-    }
-
-    if (inputMatcher2 != "" && input.ToLower() != inputMatcher2.ToLower())
-    {
-        valid = false;
-    }
-
-    if (inputMatcher3 != "" && input.ToLower() != inputMatcher3.ToLower())
-    {
-        valid = false;
-    }
-
-    if ( intCheck && int.TryParse(input, out int trash)) // ask derek
-    {
-        return false;
-    }
-
-
-    return valid;
-}
-
-//function for displaying Sword Icon
-void swordIcon()
-{
-
-    Console.WriteLine("       [");
-    Console.WriteLine(" @xxxxx{:::::::::::::::::::::::::::>");
-    Console.WriteLine("       [");
-
-
-}
-
-// function for displaying sword Icon with Header line
-void Header()
-{
-
-    swordIcon();
-    Console.WriteLine("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-}
-
-// Title Screen and start of game
-
-Console.WriteLine("=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=\n");
-Console.WriteLine("       [                                                                                        ]");
-Console.WriteLine(" @xxxxx{:::::::::::::::::::::::::::>   || The Legend of Boog ||     <:::::::::::::::::::::::::::}xxxxx@");
-Console.WriteLine("       [                                                                                        ]\n");
-Console.WriteLine("                                       || Type (E) to Start  ||\n");
-Console.WriteLine("=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=\n");
-Console.WriteLine("                                                                              Created By: Chandler Combs");
-Console.Write(":");
-String PlayerStart = Console.ReadLine();
-
-while (validateInput(PlayerStart, inputMatcher: "e") == false)
-{
-    Console.Clear();
-    Console.WriteLine("=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=\n");
-    Console.WriteLine("       [                                                                                        ]");
-    Console.WriteLine(" @xxxxx{:::::::::::::::::::::::::::>   || The Legend of Boog ||     <:::::::::::::::::::::::::::}xxxxx@");
-    Console.WriteLine("       [                                                                                        ]\n");
-    Console.WriteLine("                                       || Type (E) to Start  ||\n");
-    Console.WriteLine("=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=\n");
-    Console.WriteLine("                                                                              Created By: Chandler Combs");
-    Console.WriteLine("Type (E) to start");
-    Console.Write(":");
-    PlayerStart = Console.ReadLine();
-   
-       
-
-}
-
-Console.Clear();
-
-// intro cutscene and ask for name
-Header();
-Console.WriteLine("In the ethereal realm of Boog, where emerald skies danced with hues of violet, and the air\nwhispered secrets of ancient magic. A land brimming with mystical wonders stood on the\nprecipice of annihilation. This enchanted realm, teeming with magnificent creatures and\nbreathtaking landscapes, now faces an imminent demise at the hands of the nefarious Chunky Dungus.\n\nA shadow has descended upon Boog, cast by the malevolent ambitions of Chunky Dungus,\na man consumed by darkness and a thirst for dominion. His ominous presence looms over the\nland like a shroud, threatening to plunge the realm into eternal despair.\n\nYet, amidst this encroaching gloom, a glimmer of hope shimmers ever so faintly—a prophecy\nforetelling the creation of the legendary Artifact of Boog, the sole instrument capable of\nvanquishing the malevolence that threatened to swallow the land whole.\n\nFor this Artifact to manifest, a valiant adventurer is needed—a hero brave enough to embark on\na perilous quest to gather the three fabled Boog Stones scattered across the land.\nThese stones, imbued with raw elemental power, are fiercely guarded by formidable creatures lurking\nwithin the depths of the most treacherous dungeons, deterring all but the most resolute\nand daring of souls.\n\nAs the weight of destiny hangs heavy in the air, a question emerges from the whispers of fate:\nWho would dare to step forward and undertake this formidable journey?\nWhose name would be etched in Boog's history as the savior of this wondrous realm?\n\n");
-
-Console.Write("Enter Name:");
-string PlayerNameBad = Console.ReadLine();
-string PlayerName = PlayerNameBad.Trim();
+    UIService.ClearAll();
+    UIService.TitleScreen();
+    playerInput = Console.ReadLine() ?? "";
+} while (!input.ValidateInput(playerInput, inputMatcher: "e"));
 
 // check for valid name
-while (validateInput(PlayerName, maxLength: 15, intCheck: true ) == false)
+do
 {
-    Console.Clear();
-    Header();
-    Console.WriteLine("In the ethereal realm of Boog, where emerald skies danced with hues of violet, and the air\nwhispered secrets of ancient magic. A land brimming with mystical wonders stood on the\nprecipice of annihilation. This enchanted realm, teeming with magnificent creatures and\nbreathtaking landscapes, now faces an imminent demise at the hands of the nefarious Chunky Dungus.\n\nA shadow has descended upon Boog, cast by the malevolent ambitions of Chunky Dungus,\na man consumed by darkness and a thirst for dominion. His ominous presence looms over the\nland like a shroud, threatening to plunge the realm into eternal despair.\n\nYet, amidst this encroaching gloom, a glimmer of hope shimmers ever so faintly—a prophecy\nforetelling the creation of the legendary Artifact of Boog, the sole instrument capable of\nvanquishing the malevolence that threatened to swallow the land whole.\n\nFor this Artifact to manifest, a valiant adventurer is needed—a hero brave enough to embark on\na perilous quest to gather the three fabled Boog Stones scattered across the land.\nThese stones, imbued with raw elemental power, are fiercely guarded by formidable creatures lurking\nwithin the depths of the most treacherous dungeons, deterring all but the most resolute\nand daring of souls.\n\nAs the weight of destiny hangs heavy in the air, a question emerges from the whispers of fate:\nWho would dare to step forward and undertake this formidable journey?\nWhose name would be etched in Boog's history as the savior of this wondrous realm?\n\n");
-    Console.WriteLine("Old Dude: Hmm... That name is..... kinda trash...\nMaybe try something that is NOT a number, or obnoxiously long... do better");
-    Console.Write("Enter Name:");
-    PlayerNameBad = Console.ReadLine();
-    PlayerName = PlayerNameBad.Trim();
+    StoryService.DisplayStory();
 
-}
+    if (!isValid)
+    {
+        Console.WriteLine("Old Dude: Hmm... That name is..... kinda trash...\nMaybe try something that is NOT a number, or obnoxiously long... do better");
+    }
+
+    Console.Write("Enter Name:");
+    playerInput = Console.ReadLine() ?? "";
+    player.Name = playerInput.Trim();
+
+    isValid = input.ValidateInput(player.Name, maxLength: 25, intCheck: true);
+} while (!isValid);
 
 // transition dialog into class selection
-Console.Clear(); 
-Header();
-Console.WriteLine($"Old Dude: Ahh, {PlayerName} is it? Well… please take my endless gratitude for daring to embark on this journey! \nBest of luck for you as you depart on this quest, please bring peace to the kingdom of Boog once again!\n");
+StoryService.DisplayNameIntroduction(player.Name);
 
+input.Continue();
 
-Continue();
-
-
-// Class Selection
-    Header();
-SelectClass();
-
-
-Console.Write("\n\nType the number that is above the class you wish to select:");
-String PlayerClassNum = Console.ReadLine();
+var playerClassNum = "";
 
 // check for valid class selection
-while (PlayerClassNum != "1" && PlayerClassNum != "2" && PlayerClassNum != "3")
+do
 {
-    Console.Clear();
-    Header();
-    SelectClass();
+    UIService.SelectClass();
+    playerClassNum = Console.ReadLine() ?? "";
+} while (playerClassNum != "1" && playerClassNum != "2" && playerClassNum != "3");
 
-
-    Console.Write("\n\nType the number that is above the class you wish to select:");
-    PlayerClassNum = Console.ReadLine();
-
-
-}
-
-
-// assigning Player class to PlayerClassNum
-Console.Clear();
-Header();
-
-String PlayerClass = null;
-
-if (PlayerClassNum == "1")
+var playerClass = playerClasses.Find(playerClass =>
 {
-    PlayerClass = "Cheeze Wiz";
+    return playerClass.Id == int.Parse(playerClassNum);
+})!;
 
-}
-
-if (PlayerClassNum == "2")
-{
-    PlayerClass = "Beast Blade";
-
-}
-
-if (PlayerClassNum == "3")
-{
-    PlayerClass = "Prismancer Rouge";
-
-}
-
-// creatiing Player object
-Player Player = new Player(PlayerName, PlayerClass);
+player.Class = playerClass.Name;
 
 // Choose Weapon
+StoryService.DisplayWeaponIntroduction(player);
 
-Console.WriteLine($"Old Dude: Incredible! I have never met a {PlayerClass} in person before! \n\nNow..{PlayerName}, A hero is nothing without a trusty companion! I shall forge you a weapon! \nAs a {PlayerClass} like yourself, I entrust one of these two weapon types would suit you best?");
+string weaponChoice = "";
 
-String WeaponChoice = " ";
+Console.WriteLine($"\n\n(1) an {playerClass.Weapons[0]}?, or would you prefer an (2) {playerClass.Weapons[1]}? \ndon't overthink it..... they both perform the same...");
+Console.Write(":");
+weaponChoice = Console.ReadLine();
 
-if (PlayerClassNum == "1")
+while (weaponChoice != "1" && weaponChoice != "2")
 {
-    Console.WriteLine("\n\n(1) an Enchanted Cheddar Staff?, or would you prefer an (2) Etheral Cheese Wand? \ndon't overthink it..... they both perform the same...");
-    Console.Write(":");
-    WeaponChoice = Console.ReadLine();
-
-}
-if (PlayerClassNum == "2")
-{
-    Console.WriteLine("\n\n(1) a Mountainforge GreatSword?, or would you prefer (2) Dual Shredder Blades? \ndon't overthink it..... they both perform the same...");
-    Console.Write(":");
-    WeaponChoice = Console.ReadLine();
-
-}
-if (PlayerClassNum == "3")
-{
-    Console.WriteLine("\n\n(1) DeathGem Daggers?, or would you prefer an (2)Crystalized Shadow-Bow? \ndon't overthink it..... they both perform the same...");
-    Console.Write(":");
-    WeaponChoice = Console.ReadLine();
-
+    Console.Write($"\nOld Dude: *sigh* Please just choose 1 or 2. It is not that difficult, {player.Name}...\n:");
+    weaponChoice = Console.ReadLine();
 }
 
-// check for valid weapon choice
-
-while (WeaponChoice != "1" && WeaponChoice != "2")
-{ 
-    Console.Write($"\nOld Dude: *sigh* Please just choose 1 or 2. It is not that difficult, {Player.Name}...\n:");
-    WeaponChoice = Console.ReadLine();
-
-}
-
-// ESTABLISHING the weapon type chosen
-
-String WeaponType = "";
-
-if (PlayerClassNum == "1" && WeaponChoice == "1")
-{
-    WeaponType = "Enchanted Cheddar Staff";
-}
-
-if (PlayerClassNum == "1" && WeaponChoice == "2")
-{
-    WeaponType = "Etheral Cheese Wand";
-}
-
-if (PlayerClassNum == "2" && WeaponChoice == "1")
-{
-    WeaponType = "Mountainforge GreatSword";
-}
-
-if (PlayerClassNum == "2" && WeaponChoice == "2")
-{
-    WeaponType = "Dual Shredder Blades";
-}
-
-if (PlayerClassNum == "3" && WeaponChoice == "1")
-{
-    WeaponType = "DeathGem Daggers";
-}
-
-if (PlayerClassNum == "3" && WeaponChoice == "2")
-{
-    WeaponType = "Crystalized Shadow-Bow";
-}
-
+player.Weapon.Type = playerClass.Weapons[int.Parse(weaponChoice) - 1];
 
 // Name your Weapon
-Console.Clear();
-Header();
+UIService.Header();
+Console.WriteLine("Old Dude: Marvelous choice! Now... What shall you name your mighty weapon?");
+Console.Write("Enter Weapon Name:");
+string weaponNameBad = Console.ReadLine() ?? "";
+string weaponName = weaponNameBad.Trim();
 
-Console.WriteLine("Old Dude: Marvelous choice! Now... What shall you name your mighty weapon?\nEnter Weapon Name: ");
-String WeaponNameBad = Console.ReadLine();
-String WeaponName = WeaponNameBad.Trim();
-
-
-while (validateInput(WeaponName, maxLength: 15, intCheck: true) == false)
+while (input.ValidateInput(weaponName, maxLength: 15, intCheck: true) == false)
 {
-    Console.Clear();
-    Header();
+    UIService.Header();
     Console.WriteLine("\nOld Dude: That Name is horrible...Maybe try something that is NOT a number, or obnoxiously long... do better");
     Console.Write("Enter Weapon Name:");
-    WeaponNameBad = Console.ReadLine();
-    WeaponName = WeaponNameBad.Trim();
-    
-
+    weaponNameBad = Console.ReadLine() ?? "";
+    weaponName = weaponNameBad.Trim();
 }
 
-//creating weapon object
-Weapon PlayersWeapon = new Weapon(WeaponName, WeaponType);
+player.Weapon.Name = weaponName;
 
 // Confirm Character
-Console.Clear();
-Header();
-
-Console.WriteLine($"Name: {Player.Name}\nClass: {Player.Class}\nLevel: {Player.Level}\n\n\nWeapon: {PlayersWeapon.name} the {PlayersWeapon.Type}\nWeapon Base Damage: {PlayersWeapon.BaseDamage} \nWeapon Crit Chance: {PlayersWeapon.CritRate}%");
-
-Continue();
+UIService.Header();
+UIService.PlayerRecap(player);
+input.Continue();
 
 // Dialog transition into Forest Dungeon
-
-Console.Clear();
-Header();
-
-Console.WriteLine("Old Dude: AND WE ARE OFF!!! Your quest begins in the Mushroom Woods, east of here, to find the Mush Elder. \nThere, amidst the towering trees, He can lead you to the forest dungeon, where the first Moog Stone rests. \nThe Moog Stone of the Forest! Hasten there, for darkness looms!");
-Console.WriteLine("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-Console.WriteLine("\nWith resolve burning in your eyes, you waste no time. You surge forth, charging through the emerald tapestry \nof the Mushroom Woods.Entering the heart of the woods, you were met by the Mush Elder, a venerable figure \ndraped in robes woven from luminescent fungi. With an air of solemnity, the elder addressed speaks…");
-Console.WriteLine("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-Console.WriteLine($"\nMush Elder: Welcome, valiant {Player.Name} the {Player.Class}, intoned the Mush Elder, his voice resonating \nwith both gratitude and concern. Our village suffers under the veil of night, beset by malevolent creatures \nfrom the dungeon \nthat plunder our precious Glow Shrooms, stealing our source of radiance.\n\nYour heart surged with a mixture of empathy and determination. \n{Player.Name}:Fear not, revered elder. I shall confront these adversaries and reclaim your stolen Glow Shrooms! \n\nyou vowed, with your voice carrying the weight of your promise.\nWith a respectful bow from the Mush Elder, You dash towards the yawning maw of the forest dungeon, \nto retrieve the Glow Shrooms, and find the Moog Stone of the Forest!");
-Console.WriteLine("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-Console.WriteLine("\nAs you step closer to the enigmatic forest dungeon, your gaze fixes upon its grandeur—crafted of \nancient stone, adorned with verdant moss, and illuminated by an ethereal glow emanating from an array of \nluminescent mushrooms. The air around the entrance crackles with an arcane energy, hinting at the mysteries \nveiled within.Standing before the colossal wooden door that guards the threshold to this mystical domain, \nyou nod solemnly, acknowledging the weight of the impending venture. \nWith resolute determination fueling your every step, you charge forth, \nyour heart pounding in rhythm with the call of adventure.");
-Console.WriteLine("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-Console.WriteLine("\n\n\n                               *Now Entering the Forest Dungeon*\n\n");
-Continue();
-
-// connor stuff
-
-// Dungeon ForestDungeon = new Dungeon();
-// ForestDungeon.setPlayer(Player);
+UIService.Header();
+StoryService.DisplayForestDungeon(player);
+input.Continue();
 
 
-
-// Enemies
-Random random1 = new Random();
-Enemy ChunkySlime = new Enemy("Chunky Slime", 75, 5);
-Enemy Skeleton = new Enemy("Skelly", 120, 5);
-Enemy[] randomEnemy = {ChunkySlime, Skeleton};
-
+// Forest Dungeon Enemies
+Random random = new Random();
+Enemy MushSlime = new Enemy("Mush Slime", 75, 75, 10, 20, 1, 75, 10);
+Enemy SkellyShroom = new Enemy("Skelly Shroom", 100, 100, 10, 20, 1, 90, 30);
+Enemy SwampGoblin = new Enemy("Swamp Goblin", 120, 120, 10, 20, 1, 80, 20);
+Enemy MossyGolem = new Enemy("Mossy Golem", 140, 140, 10, 20, 1, 80, 10);
+Enemy LuminBat = new Enemy("Lumin Bat", 40, 40, 5, 10, 1, 75, 10);
+Enemy enemy = new Enemy("enemy", 1, 1, 1, 1, 1, 1, 1);
 
 
 // FOREST DUNGEON 
@@ -377,149 +121,359 @@ String CombatDialog1 = "";
 String CombatDialog2 = "";
 String CombatDialog3 = "";
 String PlayerAction = "";
-int HealthPotions = 3;
-int ManaPotions = 3;
-Random random = new Random();   
-    Enemy enemy = new Enemy("TRASH",1 , 1);
 
+//Forest Dungeon ROOMS
+ForestRoom currentRoom = new ForestRoom()
+{
+    RoomId = 0,
+    HasEvent = false,
+    NumOfEnemies = 0,
+    HasKey = false
+};
+
+ForestRoom room1 = new ForestRoom()
+{
+    RoomId = 1,
+    EntryDialog = " you entered ROOM 1",
+    EnemyClearDialog = " you killed baddies",
+    HasEvent = false,
+    NumOfEnemies = 3,
+    FullNumofEnemies = 3,
+    HasKey = true
+};
+
+ForestRoom room2 = new ForestRoom()
+{
+    RoomId = 2,
+    EntryDialog = " you entered room 2 ",
+    EnemyClearDialog = " you killed baddies",
+    HasEvent = false,
+    NumOfEnemies = 4,
+    FullNumofEnemies = 4,
+    HasKey = false
+};
+
+
+// ability text
+String ability1 = "?????";
+String ability2 = "?????";
+String ability3 = "?????";
+String Uability = "?????";
 
 // forest dungeon UI function
 
 void ForestDungeonUI()
 {
     Console.WriteLine("=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~  Forest Dungeon  ~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=");
-    Console.WriteLine("                                                    Room 1                                                  ");
+    Console.WriteLine($"                                                    Room {currentRoom.RoomId}                                        ");
     Console.WriteLine("       [                                                                                           ]");
     Console.WriteLine(" @xxxxx{:::::::::::::::::::::::::::>                                   <:::::::::::::::::::::::::::}xxxxx@");
     Console.WriteLine("       [                                                                                           ]\n");
-    Console.WriteLine($"[{Player.Name}] Level:{Player.Level} {Player.Class}                                                EXP: {Player.XP}/100");
-    Console.WriteLine($"Health: {Player.Health}\nMana: {Player.Mana}\n");
-    Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Enemies  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-
-    Console.WriteLine($"   [{enemy.name}] Health:{enemy.health}\n\n");
+    Console.WriteLine($"[{player.Name}] Level: {player.Level} {player.Class}                                                EXP: {player.Xp}/{player.XpNeeded}          Gold:{player.Gold}");
+    Console.WriteLine($"Health: {player.Health}/{player.FullHealth}\nMana: {player.Mana}/{player.FullMana}   \n");
+    Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Enemies  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    Console.WriteLine($"Enemies remaining: {currentRoom.NumOfEnemies} / {currentRoom.FullNumofEnemies} \n\n");
+    Console.WriteLine($"  [{enemy.Name}] Health:{enemy.Health}\n\n"); ;
 
 
     Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Dialog  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-    Console.WriteLine(CombatDialog1);
-    Console.WriteLine(CombatDialog2);
-    Console.WriteLine(CombatDialog3);
-    
 
+    CombatDialog();
+
+
+
+    Console.WriteLine($"                                                                          Dungeon Keys: 0       Boss Key: 0  ");
     Console.WriteLine("===============================================  Action Bar  ===============================================");
-    Console.WriteLine("|  (B)asic Attack  [5 MP]                                                                                  |");
-    Console.WriteLine("|  (S)trong Attack [10 MP]                                                                                 |");
-   Console.WriteLine($"|  (H)ealth Potion [{HealthPotions}]                                                                                     |");
-   Console.WriteLine($"|  (M)ana Potion   [{ManaPotions}]                                                                                     |");
-    Console.WriteLine("============================================================================================================\n\n");
-
-    Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Inventory  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n");
-    Console.WriteLine($" Weapon:{PlayersWeapon.name} the {PlayersWeapon.Type}                                       Gold:{Player.Gold}\n\n");
-    Console.WriteLine(" Mana Orb Lvl 1: {Restores 2 Mana Per Turn}");
-    Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n");
+    Console.WriteLine($"|  (B)asic Attack  [0 MP]                                           (1){ability1}                                    |");
+    Console.WriteLine($"|  (S)trong Attack [10 MP]                                          (2){ability2}                                    |");
+    Console.WriteLine($"|  (H)ealth Potion [{HealthPotions}]                                (3){ability3}                                    |");
+    Console.WriteLine($"|  (M)ana Potion   [{ManaPotions}]                                  (4){Uability}                                    |");
+    Console.WriteLine("============================================================================================================");
+    Console.WriteLine("(I)nventory           (D)ungeon Map               (V)endor             (C)haracter               (A)bilities ");
+    Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
     Console.WriteLine("Type Action:");
     PlayerAction = Console.ReadLine();
     PlayerAction = PlayerAction.ToLower();
 
 }
 
-
-void Combat()
+// non combat action
+String PlayerAction2 = "";
+void ForestDungonUiNonCombat()
 {
-    while (Player.Health > 0)
+
+
+    Console.WriteLine("=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~  Forest Dungeon  ~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=");
+    Console.WriteLine($"                                                    Room {currentRoom.RoomId}                                        ");
+    Console.WriteLine("       [                                                                                           ]");
+    Console.WriteLine(" @xxxxx{:::::::::::::::::::::::::::>                                   <:::::::::::::::::::::::::::}xxxxx@");
+    Console.WriteLine("       [                                                                                           ]\n");
+    Console.WriteLine($"[{player.Name}] Level:{player.Level} {player.Class}                                                EXP: {player.Xp}/{player.XpNeeded}");
+    Console.WriteLine($"Health: {player.Health}\nMana: {player.Mana}                                                              Gold: {player.Gold}\n");
+
+
+    Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Dialog  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+
+    Console.WriteLine("Type 2 to enter room 2");
+
+
+    Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+    Console.WriteLine("Type Action:");
+    PlayerAction2 = Console.ReadLine();
+    PlayerAction2 = PlayerAction2.ToLower();
+
+}
+
+// Dialog Delay
+void CombatDialog()
+{
+    if (CombatDialog1 != "")
+    {
+        Thread.Sleep(500);
+        Console.WriteLine(CombatDialog1);
+        Thread.Sleep(100);
+    }
+    else
+    {
+        Console.WriteLine(CombatDialog1);
+    }
+    if (CombatDialog2 != "")
+    {
+        Thread.Sleep(500);
+        Console.WriteLine(CombatDialog2);
+        Thread.Sleep(500);
+    }
+    else
+    {
+        Console.WriteLine(CombatDialog2);
+    }
+    if (CombatDialog3 != "")
+    {
+        Thread.Sleep(500);
+        Console.WriteLine(CombatDialog3);
+        Thread.Sleep(500);
+    }
+    else
     {
 
-        int enemyPicker = random.Next(0, 1);
-        if (enemyPicker == 0)
-        {
+        Console.WriteLine(CombatDialog3);
+    }
+}
 
-            enemy = randomEnemy[0];
-        }
+// combat dialog clear
+void combatDialogClear()
+{
+    CombatDialog1 = "";
+    CombatDialog2 = "";
+    CombatDialog3 = "";
 
-        if (enemyPicker == 1)
-        {
+}
 
-            enemy = randomEnemy[1];
-        }
 
-        Console.Clear();
+// Pick forest enemy method
+
+void PickForestEnemy()
+{
+
+    int enemyPicker = random.Next(1, 5);
+    if (enemyPicker == 1)
+    {
+
+        enemy = MushSlime;
+    }
+
+    if (enemyPicker == 2)
+    {
+
+        enemy = SwampGoblin;
+    }
+
+    if (enemyPicker == 3)
+    {
+
+        enemy = LuminBat;
+    }
+
+    if (enemyPicker == 4)
+    {
+
+        enemy = SkellyShroom;
+    }
+
+    if (enemyPicker == 5)
+    {
+
+        enemy = MossyGolem;
+    }
+
+}
+
+// INVENTORY SCREEN
+string navInput = "";
+
+PickForestEnemy();
+
+/////////////////////////////  START OF GAME  ///////////////////////////////////////
+
+currentRoom = room1;
+
+void LegendOfBoog()
+{
+    while (player.Health > 0)
+    {
+        UIService.ClearAll();
+
         ForestDungeonUI();
 
-
-        PlayersWeapon.BaseDamage = random.Next(5, 15);
-        enemy.damage = random.Next(5, 15);
-
+        player.Weapon.Damage = random.Next(player.Weapon.BaseDamage, player.Weapon.MaxDamage);
+        enemy.Damage = random.Next(10, 20);
 
         // Basic Attack
-        if (PlayerAction == "b" & Player.Mana >= 5)
+        if (PlayerAction == "b")
         {
-            enemy.health = enemy.health - PlayersWeapon.BaseDamage;
-            CombatDialog1 = $"- You dealt {PlayersWeapon.BaseDamage} damage to {enemy.name}!\n";
-            Player.Health = Player.Health - enemy.damage;
-            CombatDialog2 = $"- {enemy.name} Slaps back and hits you for {enemy.damage}!\n";
-            Player.Mana = Player.Mana - 5;
-            CombatDialog3 = "- You Used 5 Mana";
-            Player.Mana = Player.Mana + 2;
-            PlayerAction = "z";
+            int roll = random.Next(1, 100);
+            if (roll <= player.Weapon.CritRate)
+            {
+                enemy.Health = enemy.Health - player.Weapon.Damage * 2;
+                CombatDialog1 = $"- You dealt {player.Weapon.Damage * 2} damage to {enemy.Name}!  *CRITICAL HIT*\n";
+            }
+            else
+            {
+                enemy.Health = enemy.Health - player.Weapon.Damage;
+                CombatDialog1 = $"- You dealt {player.Weapon.Damage} damage to {enemy.Name}!\n";
+            }
+
+            int enemyMissRoll = random.Next(1, 100);
+            if (enemyMissRoll >= enemy.Accuracy)
+            {
+                CombatDialog2 = $"- The {enemy.Name} attacked, but missed!\n";
+                player.Mana = player.Mana + player.ManaRegenRate;
+                CombatDialog3 = $"- You Regained Mana {player.ManaRegenRate} Mana.";
+                PlayerAction = "z";
+            }
+            else
+            {
+                int EnemyRoll = random.Next(1, 100);
+                if (EnemyRoll <= enemy.CritRate)
+                {
+                    CombatDialog2 = $"- {enemy.Name} Strikes back and hits you for {enemy.Damage * 2} damage! *CRITICAL HIT*\n";
+                    player.Health = player.Health - enemy.Damage * 2;
+                }
+                else
+                {
+                    CombatDialog2 = $"- {enemy.Name} Strikes back and hits you for {enemy.Damage} damage!\n";
+                    player.Health = player.Health - enemy.Damage;
+                }
+
+                player.Mana = player.Mana + player.ManaRegenRate;
+                CombatDialog3 = $"- You Regained Mana {player.ManaRegenRate} Mana.";
+                PlayerAction = "z";
+            }
         }
 
-        // out of mana for Basic Attack
-        if (PlayerAction == "b" & Player.Mana < 5)
-        {
-            CombatDialog1 = "- You do not have enough Mana";
-            CombatDialog2 = "";
-            CombatDialog3 = "";
-
-
-        }
         // Strong Attack
-        if (PlayerAction == "s" & Player.Mana >= 10)
+        if (PlayerAction == "s" & player.Mana >= 10)
         {
-            enemy.health = enemy.health - PlayersWeapon.BaseDamage * 2;
-            CombatDialog1 = $"- You dealt {PlayersWeapon.BaseDamage * 2} damage to {enemy.name}!\n";
-            Player.Health = Player.Health - enemy.damage;
-            CombatDialog2 = $"- {enemy.name} Slaps back and hits you for {enemy.damage}!\n";
-            Player.Mana = Player.Mana - 10;
-            CombatDialog3 = "- You Used 10 Mana";
-            Player.Mana = Player.Mana + 2;
-            PlayerAction = "z";
+            int roll = random.Next(1, 100);
+            if (roll <= player.Weapon.CritRate)
+            {
+                enemy.Health = enemy.Health - player.Weapon.Damage * 4;
+                CombatDialog1 = $"- You dealt a staggering {player.Weapon.Damage * 4} damage to {enemy.Name}!  *CRITICAL HIT*\n";
+            }
+            else
+            {
+                enemy.Health = enemy.Health - player.Weapon.Damage * 2;
+                CombatDialog1 = $"- You dealt {player.Weapon.Damage * 2} damage to {enemy.Name}!\n";
+            }
+            int enemyMissRoll = random.Next(1, 100);
+            if (enemyMissRoll >= enemy.Accuracy)
+            {
+                CombatDialog2 = $"- The {enemy.Name} attacked, but missed!\n";
+                player.Mana = player.Mana - 10;
+                CombatDialog3 = $"- You used 10 Mana.";
+                PlayerAction = "z";
+            }
+            else
+            {
+                int EnemyRoll = random.Next(1, 100);
+                if (EnemyRoll <= enemy.CritRate)
+                {
+                    CombatDialog2 = $"- {enemy.Name} Strikes back and hits you for {enemy.Damage * 2} damage! *CRITICAL HIT*\n";
+                    player.Health = player.Health - enemy.Damage * 2;
+                }
+                else
+                {
+                    CombatDialog2 = $"- {enemy.Name} Strikes back and hits you for {enemy.Damage} damage!\n";
+                    player.Health = player.Health - enemy.Damage;
+                }
+
+                player.Mana = player.Mana - 10;
+                CombatDialog3 = $"- You used 10 Mana.";
+                PlayerAction = "z";
+            }
         }
 
         // out of mana for Strong Attack
-        if (PlayerAction == "b" & Player.Mana < 10)
+        if (PlayerAction == "s" & player.Mana < 10)
         {
             CombatDialog1 = "- You do not have enough Mana";
             CombatDialog2 = "";
             CombatDialog3 = "";
-
-
         }
 
         // Health Potion
         if (PlayerAction == "h" & HealthPotions > 0)
         {
-            Player.Health = Player.Health + 20;
-            CombatDialog1 = "- You drank a Health Potion, you Gained 20 Health!";
-            Player.Health = Player.Health - enemy.damage;
-            CombatDialog2 = $"- {enemy.name} Slaps back and hits you for {enemy.damage}!\n";
-            CombatDialog3 = "";
-            HealthPotions = HealthPotions - 1;
-            Player.Mana = Player.Mana + 2;
-            PlayerAction = "z";
+            if (player.Health == player.FullHealth)
+            {
+                CombatDialog1 = "- You already have full health.";
+                CombatDialog2 = "";
+                CombatDialog3 = "";
+            }
+            else
+            {
+                player.Health = player.Health + player.HealthPotionValue;
+                CombatDialog1 = $"- You drank a Health Potion, you Gained {player.HealthPotionValue} Health!\n";
+
+                int HitRoll = random.Next(1, 100);
+                if (HitRoll <= 60)
+                {
+                    CombatDialog2 = "";
+                    CombatDialog3 = "";
+                    HealthPotions = HealthPotions - 1;
+                    PlayerAction = "z";
+                }
+                else
+                {
+                    int EnemyRoll = random.Next(1, 100);
+                    if (EnemyRoll <= enemy.CritRate)
+                    {
+                        CombatDialog2 = $"- The {enemy.Name} attacks you as you drink your potion and hits you for {enemy.Damage * 2} damage! *CRITICAL HIT*\n";
+                        player.Health = player.Health - enemy.Damage * 2;
+                    }
+                    else
+                    {
+                        CombatDialog2 = $"- The {enemy.Name} attacks you as you drink your potion and hits you for {enemy.Damage} damage!\n";
+                        player.Health = player.Health - enemy.Damage;
+                    }
+
+                    CombatDialog3 = "";
+                    HealthPotions = HealthPotions - 1;
+                    PlayerAction = "z";
+                }
+            }
         }
 
-
         // health cap
-        if (Player.Health > 100)
+        if (player.Health > player.FullHealth)
         {
-
-            Player.Health = 100;
+            player.Health = player.FullHealth;
         }
 
         // health potion cap
         if (HealthPotions <= 0)
         {
             HealthPotions = 0;
-
         }
         // out of Health Potions
         if (PlayerAction == "h" & HealthPotions <= 0)
@@ -527,27 +481,55 @@ void Combat()
             CombatDialog1 = "- You are out of Health Potions";
             CombatDialog2 = "";
             CombatDialog3 = "";
-
         }
-
 
         // Mana Potion
         if (PlayerAction == "m" & ManaPotions > 0)
         {
-            Player.Mana = Player.Mana + 20;
-            CombatDialog1 = "- You drank a Mana Potion, you Gained 20 Mana!";
-            Player.Health = Player.Health - enemy.damage;
-            CombatDialog2 = $"- {enemy.name} Slaps back and hits you for {enemy.damage}!\n";
-            CombatDialog3 = "";
-            ManaPotions = ManaPotions - 1;
-            PlayerAction = "z";
+            if (player.Mana == player.FullMana)
+            {
+                CombatDialog1 = "- You already have full Mana.";
+                CombatDialog2 = "";
+                CombatDialog3 = "";
+            }
+            else
+            {
+                player.Mana = player.Mana + player.ManaPotionValue;
+                CombatDialog1 = $"- You drank a Mana Potion, you Gained {player.ManaPotionValue} Mana!\n";
+
+                int HitRoll = random.Next(1, 100);
+                if (HitRoll <= 60)
+                {
+                    CombatDialog2 = "";
+                    CombatDialog3 = "";
+                    ManaPotions = ManaPotions - 1;
+                    PlayerAction = "z";
+                }
+                else
+                {
+                    int EnemyRoll = random.Next(1, 100);
+                    if (EnemyRoll <= enemy.CritRate)
+                    {
+                        CombatDialog2 = $"- The {enemy.Name} attacks you as you drink your potion and hits you for {enemy.Damage * 2} damage! *CRITICAL HIT*\n";
+                        player.Mana = player.Mana - enemy.Damage * 2;
+                    }
+                    else
+                    {
+                        CombatDialog2 = $"- The {enemy.Name} attacks you as you drink your potion and hits you for {enemy.Damage} damage!\n";
+                        player.Mana = player.Mana - enemy.Damage;
+                    }
+
+                    CombatDialog3 = "";
+                    ManaPotions = ManaPotions - 1;
+                    PlayerAction = "z";
+                }
+            }
         }
 
         // Mana Cap
-        if (Player.Mana > 100)
+        if (player.Mana > player.FullMana)
         {
-
-            Player.Mana = 100;
+            player.Mana = player.FullMana;
         }
 
         // out of Mana Potions
@@ -556,244 +538,382 @@ void Combat()
             CombatDialog1 = "- You are out of Mana Potions";
             CombatDialog2 = "";
             CombatDialog3 = "";
-
-
         }
 
         // Mana potion cap
         if (ManaPotions <= 0)
         {
             ManaPotions = 0;
-
         }
         //mana out
 
-        if (Player.Mana <= 0)
+        if (player.Mana <= 0)
         {
-
-            Player.Mana = 0;
+            player.Mana = 0;
         }
-
 
         // Enemy Death
-        if (enemy.health <= 0)
+        if (enemy.Health <= 0)
         {
-            enemy.health = 0;
-            int XpGain = random.Next(10, 19);
+            int XpGain = random.Next(40, 70);
             int GoldGain = random.Next(10, 30);
-            Player.XP = Player.XP + XpGain;
-            Player.Gold = Player.Gold + GoldGain;
-            CombatDialog1 = $"BLEH! The {enemy.name} was defeated! You got {XpGain} XP! \nYou also found {GoldGain} Gold!";
-            CombatDialog2 = "";
-            CombatDialog3 = "";
-            
+            player.Xp = player.Xp + XpGain;
+            player.Gold = player.Gold + GoldGain;
+            UIService.ClearAll();
+            UIService.Header();
+            CombatDialog();
+            Console.WriteLine($"\n\nThe {enemy.Name} was defeated!! \n\nYou got {XpGain} XP! \n\nYou also found {GoldGain} Gold! \n");
+            enemy.Health = enemy.FullHealth;
+            currentRoom.NumOfEnemies = currentRoom.NumOfEnemies - 1;
+            PickForestEnemy();
+            input.Continue();
+            combatDialogClear();
+
+        }
+        // stay alive if you both die
+        if (enemy.Health <= 0 & player.Health <= 0)
+        {
+            player.Health = 1;
+            UIService.Header();
+            Console.WriteLine("\n~ That was a close call... You are ever so sligthly clinging to life");
         }
 
 
-    }
+        // NON COMBAT LOOP ////////////////
+        while (currentRoom.NumOfEnemies == 0)
+        {
+            UIService.Header();
+            ForestDungonUiNonCombat();
 
+            if (PlayerAction2 == "2")
+            {
+                currentRoom = room2;
+            }
+            if (PlayerAction2 == "1")
+            {
+                currentRoom = room1;
+            }
+        }
+
+        String MapDialog = "";
+
+        if (currentRoom == room1)
+        {
+            MapDialog = "You are in Room 1";
+        }
+        if (currentRoom == room2)
+        {
+            MapDialog = "You are in Room 2";
+        }
+
+
+        //Forest Dungeon  Map
+        if (PlayerAction == "d")
+        {
+            UIService.Header();
+            Console.WriteLine($"                                         Forest Dungeon                      {MapDialog}\n");
+
+            Console.WriteLine("                                            ======= 8                                                      ");
+            Console.WriteLine("                                            |  B  |                                                        ");
+            Console.WriteLine("                                            |     |                                                        ");
+            Console.WriteLine("                                            === ===                                                        ");
+            Console.WriteLine("                               6 =======      | |      ======= 7                                           ");
+            Console.WriteLine("                                 |     |____=== ===____|     |                                             ");
+            Console.WriteLine("                                 |      ____       ____      |                                             ");
+            Console.WriteLine("                                 =======    |     |    =======                                             ");
+            Console.WriteLine("                                            === === 5                                                      ");
+            Console.WriteLine("                          3 =======___________| |___________======= 4                                      ");
+            Console.WriteLine("                            |      ___________   ___________      |                                        ");
+            Console.WriteLine("                            |     |           | |           |     |                                        ");
+            Console.WriteLine("                            =======         === === 2       =======                                        ");
+            Console.WriteLine("                                            |     |                                                        ");
+            Console.WriteLine("                                            |     |                                                        ");
+            Console.WriteLine("                                            =======                                                        ");
+            Console.WriteLine("                                              | |                                                          ");
+            Console.WriteLine("                                            === === 1                                                      ");
+            Console.WriteLine("                                            |     |                                                        ");
+            Console.WriteLine("                                            |     |                                                        ");
+            Console.WriteLine("                                            ==   ==                                                        ");
+            Console.WriteLine("                                                                                                           ");
+            Console.WriteLine("============================================================================================================");
+
+            Console.WriteLine("Type (B) to go back:");
+            navInput = Console.ReadLine();
+            navInput = navInput.ToLower();
+
+            if (navInput == "b")
+            {
+                PlayerAction = "z";
+            }
+
+        }
+
+        // INVENTORY UI
+        if (PlayerAction == "i")
+        {
+            UIService.Header();
+            Console.WriteLine($"                                      {player.Name}'s Inventory ");
+            Console.WriteLine($"Weapon: {player.Weapon.Name} the {player.Weapon.Type} \n");
+            Console.WriteLine($"Health Potions: {HealthPotions}\n");
+            Console.WriteLine($"Mana Potions: {ManaPotions}\n\n");
+            Console.WriteLine($"Gold: {player.Gold}\n\n\n");
+            Console.WriteLine("============================================================================================================");
+
+            Console.WriteLine("Type (B) to go back:");
+            navInput = Console.ReadLine();
+            navInput = navInput.ToLower();
+
+            if (navInput == "b")
+            {
+                PlayerAction = "z";
+            }
+        }
+
+        // LEVEL UP
+        if (player.Xp >= player.XpNeeded)
+        {
+            player.Level = player.Level + 1;
+
+            UIService.Header();
+            Console.WriteLine($"                                              LEVEL UP! You are now Level {player.Level}!\n\n\n");
+
+            if (player.Level == 2 & playerClassNum == "1")
+            {
+                UIService.ClearAll();
+                UIService.Header();
+                Console.WriteLine("You unloacked a new ability! \n\nQueso Blast:");
+                Console.WriteLine("\nYou cast boiling hot liquid cheese on your enemy! \nThis ability deals +20 to your normal damage and inflicts burn for 3 turns!");
+                input.Continue();
+            }
+            if (player.Level == 5 & playerClassNum == "1")
+            {
+                UIService.ClearAll();
+                UIService.Header();
+                Console.WriteLine("You unloacked a new ability! \n\nNacho Melt:");
+                Console.WriteLine("\nYou conjure a large slice of cheese that melts like a blanket over your enemy! \nThis ability makes your enemy unable to move for 2 turns!");
+                input.Continue();
+            }
+            if (player.Level == 8 & playerClassNum == "1")
+            {
+                UIService.ClearAll();
+                UIService.Header();
+                Console.WriteLine("You unloacked a new ability! \n\nCheddar Bites:");
+                Console.WriteLine("\nYou summon a swarm of tiny cheddar bite minions that swarm your enemy and bite them! \nThis ability hits for half your normal damage and can hit 5-10 times!");
+                input.Continue();
+            }
+            if (player.Level == 11 & playerClassNum == "1")
+            {
+                UIService.ClearAll();
+                UIService.Header();
+                Console.WriteLine("You unloacked your ultimate ability! \n\nCheese Storm:");
+                Console.WriteLine("\nYou summon a meteor storm of massive cheese wheels! \nThis ability hits for 4 times your normal damage!");
+                input.Continue();
+            }
+
+            Console.WriteLine($"Do you want to upgrade Health or Mana? \nType (H) for health and (M) for Mana. (+10 points) ");
+            Console.WriteLine("Type Here:");
+            String UpgradeInput = Console.ReadLine();
+            UpgradeInput = UpgradeInput.ToLower();
+
+            if (UpgradeInput == "h")
+            {
+                UIService.ClearAll();
+                UIService.Header();
+                player.FullHealth = player.FullHealth + 10;
+
+                Console.WriteLine(" - You gained 10 Health Points!");
+                input.Continue();
+            }
+            if (UpgradeInput == "m")
+            {
+                UIService.ClearAll();
+                UIService.Header();
+                player.FullMana = player.FullMana + 10;
+
+                Console.WriteLine(" - You gained 10 Mana Points!");
+                input.Continue();
+            }
+
+            UIService.Header();
+
+            Console.WriteLine($"Do you want to upgrade Weapon Damage? or Critical Rate? \nType (D) for Weapon Damage (+5 points to min and max Damage) and (C) for Critical Rate (+2 points) ");
+            Console.WriteLine("Type Here:");
+            String UpgradeInput2 = Console.ReadLine();
+            UpgradeInput2 = UpgradeInput2.ToLower();
+
+            if (UpgradeInput2 == "d")
+            {
+                UIService.ClearAll();
+                UIService.Header();
+                player.Weapon.BaseDamage = player.Weapon.BaseDamage + 5;
+                player.Weapon.MaxDamage = player.Weapon.MaxDamage + 5; ; ; ;
+                Console.WriteLine($" - Your Weapon Damage Range is now {player.Weapon.BaseDamage} - {player.Weapon.MaxDamage}! ");
+                input.Continue();
+            }
+            if (UpgradeInput2 == "c")
+            {
+                UIService.ClearAll();
+                UIService.Header();
+                player.Weapon.CritRate = player.Weapon.CritRate + 2;
+                Console.WriteLine($" - Your Crit Rate is now {player.Weapon.CritRate}%!");
+                input.Continue();
+            }
+
+            player.Health = player.FullHealth;
+            player.Mana = player.FullMana;
+            player.Xp = player.Xp - player.XpNeeded;
+            player.XpNeeded = player.XpNeeded + 50;
+
+        }
+
+        //Ability Text display
+        String CwAbility1 = "Queso Blast [15 Mana]";
+
+        if (playerClassNum == "1" & player.Level == 2)
+        {
+            ability1 = CwAbility1;
+        }
+
+        // character menue
+        if (PlayerAction == "c")
+        {
+            UIService.Header();
+
+            Console.WriteLine($"Name: {player.Name}");
+            Console.WriteLine($"Class: {player.Class}");
+            Console.WriteLine($"Level: {player.Level}");
+            Console.WriteLine($"Health: {player.FullHealth}");
+            Console.WriteLine($"Mana: {player.FullMana}");
+            Console.WriteLine($"Weapon Damage Range: {player.Weapon.BaseDamage} - {player.Weapon.MaxDamage}");
+            Console.WriteLine($"Crit Rate: {player.Weapon.CritRate}%");
+            Console.WriteLine($"Health Potion Value: {player.HealthPotionValue}");
+            Console.WriteLine($"Mana Potion Value: {player.ManaPotionValue}");
+            Console.WriteLine("============================================================================================================");
+            Console.WriteLine("(B)ack");
+
+            Console.WriteLine("Type Action:");
+            navInput = Console.ReadLine();
+            navInput = navInput.ToLower();
+
+            if (navInput == "b")
+            {
+                PlayerAction = "z";
+            }
+        }
+
+        int HPotionStock = 5;
+        int MPotionStock = 5;
+        int PocGobStock = 1;
+        int ManaOrbStock = 1;
+        int StoreLoop = 1;
+        String StoreDialog = "";
+
+        if (PlayerAction == "v")
+        {
+            while (StoreLoop == 1)
+            {
+                UIService.Header();
+                Console.WriteLine($"                                                     Store                                     Gold:{player.Gold} \n\n\n");
+
+                Console.WriteLine($"(1) Health Potion: 10 Gold");
+                Console.WriteLine($"(2) Mana Potion: 10 Gold");
+                Console.WriteLine($"(3) Health Potion Enhancer: 50 Gold [Gain 10 more points per potion] ({HPotionStock} in stock)");
+                Console.WriteLine($"(4) Mana Potion Enhancer: 50 Gold [Gain 10 more points per potion] ({MPotionStock} in stock)");
+                Console.WriteLine($"(5) Mana Restoration Orb: 100 Gold [Restores 10 Mana on actions that do not cost Mana] ({ManaOrbStock} in stock)");
+                Console.WriteLine($"(6) Pocket Goblin: 100 Gold \n[A tiny Goblin that will search your enemies after you defeat them to help you find even more gold from them] ({PocGobStock} in stock)\n");
+
+                Console.WriteLine(StoreDialog);
+
+
+
+                Console.WriteLine("\nType the number of the item you want to purchase. Or type (B) to go back.\nType Here:");
+                navInput = Console.ReadLine();
+                navInput = navInput.ToLower();
+
+                if (navInput == "b")
+                {
+                    PlayerAction = "z";
+                    StoreLoop = 0;
+                }
+
+                if (navInput == "1" & player.Gold < 10)
+                {
+                    StoreDialog = "Not Enough Gold...";
+                }
+                if (navInput == "1" & player.Gold >= 10)
+                {
+                    player.Gold = player.Gold - 10;
+                    HealthPotions = HealthPotions + 1;
+                    StoreDialog = "You Purchased a Health Potion for 10 Gold!";
+                }
+
+                if (navInput == "2" & player.Gold < 10)
+                {
+                    StoreDialog = "Not Enough Gold...";
+                }
+                if (navInput == "2" & player.Gold >= 10)
+                {
+                    player.Gold = player.Gold - 10;
+                    ManaPotions = ManaPotions + 1;
+                    StoreDialog = "You Purchased a Mana Potion for 10 Gold!";
+                }
+
+                //GOOD way to use nested if statements
+                if (navInput == "3")
+                {
+                    if (HPotionStock > 0)
+                    {
+                        if (player.Gold < 50)
+                        {
+                            StoreDialog = "Not Enough Gold...";
+                        }
+                        else
+                        {
+                            player.Gold = player.Gold - 50;
+                            HPotionStock = HPotionStock - 1;
+                            StoreDialog = "Your Health Potion Heals for +10 more!";
+                            player.HealthPotionValue = player.HealthPotionValue + 10;
+                        }
+                    }
+                    else
+                    {
+                        StoreDialog = "Out of Stock...";
+                    }
+                }
+
+                if (navInput == "4" & player.Gold < 50 & MPotionStock > 0)
+                {
+                    StoreDialog = "Not Enough Gold...";
+                }
+                if (navInput == "4" & MPotionStock <= 0)
+                {
+                    StoreDialog = "Out of Stock...";
+                }
+                if (navInput == "4" & player.Gold >= 50 & MPotionStock > 0)
+                {
+                    player.Gold = player.Gold - 50;
+                    MPotionStock = MPotionStock - 1;
+                    StoreDialog = "Your Mana Potion Restores for +10 more Mana!";
+                    player.HealthPotionValue = player.HealthPotionValue + 10;
+                }
+            }
+        }
+        //ability menu
+        if (PlayerAction == "a")
+        {
+            UIService.AbilitiesMenu(player);
+
+            navInput = Console.ReadLine() ?? "";
+            navInput = navInput.ToLower();
+            if (navInput == "b")
+            {
+                PlayerAction = "z";
+            }
+        }
+    }
 }
 
+LegendOfBoog();
 
-Combat();
-Combat();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-while (Player.Health > 0)
-{
-
-    int enemyPicker = random.Next(0, 1);
-    if (enemyPicker == 0)
-    {
-
-        enemy = randomEnemy[0];
-    }
-
-    if (enemyPicker == 1)
-    {
-
-        enemy = randomEnemy[1];
-    }
-
-    Console.Clear();
-    ForestDungeonUI();
-
-
-    PlayersWeapon.BaseDamage = random.Next(5, 15);
-    enemy.damage = random.Next(5, 15);
-
-
-    // Basic Attack
-    if (PlayerAction == "b" & Player.Mana >=5)
-    {
-        enemy.health = enemy.health - PlayersWeapon.BaseDamage;
-        CombatDialog1 = $"- You dealt {PlayersWeapon.BaseDamage} damage to {enemy.name}!\n";
-        Player.Health = Player.Health - enemy.damage;
-        CombatDialog2 = $"- {enemy.name} Slaps back and hits you for {enemy.damage}!\n";
-        Player.Mana = Player.Mana - 5;
-        CombatDialog3 = "- You Used 5 Mana";
-        Player.Mana = Player.Mana + 2;
-        PlayerAction = "z";
-    }
-
-    // out of mana for Basic Attack
-    if (PlayerAction == "b" & Player.Mana < 5)
-    {
-        CombatDialog1 = "- You do not have enough Mana";
-        CombatDialog2 = "";
-        CombatDialog3 = "";
-        
-
-    }
-    // Strong Attack
-    if (PlayerAction == "s" & Player.Mana >= 10)
-    {
-        enemy.health = enemy.health - PlayersWeapon.BaseDamage * 2;
-        CombatDialog1 = $"- You dealt {PlayersWeapon.BaseDamage * 2} damage to {enemy.name}!\n";
-        Player.Health = Player.Health - enemy.damage;
-        CombatDialog2 = $"- {enemy.name} Slaps back and hits you for {enemy.damage}!\n";
-        Player.Mana = Player.Mana - 10;
-        CombatDialog3 = "- You Used 10 Mana";
-        Player.Mana = Player.Mana + 2;
-        PlayerAction = "z";
-    }
-
-    // out of mana for Strong Attack
-    if (PlayerAction == "b" & Player.Mana < 10)
-    {
-        CombatDialog1 = "- You do not have enough Mana";
-        CombatDialog2 = "";
-        CombatDialog3 = "";
-
-
-    }
-
-    // Health Potion
-    if (PlayerAction == "h" & HealthPotions > 0)
-    {
-        Player.Health = Player.Health + 20;
-        CombatDialog1 = "- You drank a Health Potion, you Gained 20 Health!";
-        Player.Health = Player.Health - enemy.damage;
-        CombatDialog2 = $"- {enemy.name} Slaps back and hits you for {enemy.damage}!\n";
-        CombatDialog3 = "";
-        HealthPotions = HealthPotions - 1;
-        Player.Mana = Player.Mana + 2;
-        PlayerAction = "z";
-    }
-  
-
-    // health cap
-    if (Player.Health > 100)
-    {
-
-        Player.Health = 100;
-    }
-
-    // health potion cap
-    if (HealthPotions <= 0)
-    {
-        HealthPotions = 0;
-
-    }
-    // out of Health Potions
-    if (PlayerAction == "h" & HealthPotions <= 0)
-    {
-        CombatDialog1 = "- You are out of Health Potions";
-        CombatDialog2 = "";
-        CombatDialog3 = "";
-        
-    }
-   
-
-    // Mana Potion
-    if (PlayerAction == "m" & ManaPotions > 0)
-    {
-        Player.Mana = Player.Mana + 20;
-        CombatDialog1 = "- You drank a Mana Potion, you Gained 20 Mana!";
-        Player.Health = Player.Health - enemy.damage;
-        CombatDialog2 = $"- {enemy.name} Slaps back and hits you for {enemy.damage}!\n";
-        CombatDialog3 = "";
-        ManaPotions = ManaPotions - 1;
-        PlayerAction = "z";
-    }
-   
-    // Mana Cap
-    if (Player.Mana > 100)
-    {
-
-        Player.Mana = 100;
-    }
-
-    // out of Mana Potions
-    if (PlayerAction == "m" & ManaPotions == 0)
-    {
-        CombatDialog1 = "- You are out of Mana Potions";
-        CombatDialog2 = "";
-        CombatDialog3 = "";
-        
-
-    }
-
-    // Mana potion cap
-    if (ManaPotions <= 0)
-    {
-        ManaPotions = 0;
-
-    }
-    //mana out
-
-    if (Player.Mana <= 0)
-    {
-
-        Player.Mana = 0;
-    }
-
-
-    // Enemy Death
-    if (enemy.health <= 0)
-    {
-        enemy.health = 0;
-        int XpGain = random.Next(10, 19);
-        int GoldGain = random.Next(10, 30);
-        Player.XP = Player.XP + XpGain;
-        Player.Gold = Player.Gold + GoldGain;
-        CombatDialog1 = $"BLEH! The {enemy.name} was defeated! You got {XpGain} XP! \nYou also found {GoldGain} Gold!";
-        CombatDialog2 = "";
-        CombatDialog3 = "";
-        
-    }
-
-
-}
-
-    Console.WriteLine("You Died.");
+UIService.Header();
+Console.WriteLine("YOU DIED. GET REKT.");
