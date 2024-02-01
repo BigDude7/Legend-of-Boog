@@ -1,18 +1,17 @@
 ﻿using Legend_of_Boog.Models.Characters;
 using Legend_of_Boog.Models.Layout;
 using Legend_of_Boog.Services;
+using System.Net.Security;
+
 
 var input = new InputService();
-
 var player = new Player("");
-
-// POTION VARIABLES
-int HealthPotions = 3;
-int ManaPotions = 3;
-var playerInput = String.Empty;
+var playerInput = string.Empty;
+var enemy = new Enemy();
 var isValid = true;
 var playerClasses = GameService.GetPlayerClasses();
 
+// press E to start game
 do
 {
     UIService.ClearAll();
@@ -23,7 +22,7 @@ do
 // check for valid name
 do
 {
-    StoryService.DisplayStory();
+    StoryService.DisplayStoryStart();
 
     if (!isValid)
     {
@@ -32,7 +31,7 @@ do
 
     Console.Write("Enter Name:");
     playerInput = Console.ReadLine() ?? "";
-    player.Name = playerInput.Trim();
+    player.Name = playerInput.Trim();     
 
     isValid = input.ValidateInput(player.Name, maxLength: 25, intCheck: true);
 } while (!isValid);
@@ -106,12 +105,14 @@ input.Continue();
 
 // Forest Dungeon Enemies
 Random random = new Random();
-Enemy MushSlime = new Enemy("Mush Slime", 75, 75, 10, 20, 1, 75, 10);
-Enemy SkellyShroom = new Enemy("Skelly Shroom", 100, 100, 10, 20, 1, 90, 30);
-Enemy SwampGoblin = new Enemy("Swamp Goblin", 120, 120, 10, 20, 1, 80, 20);
-Enemy MossyGolem = new Enemy("Mossy Golem", 140, 140, 10, 20, 1, 80, 10);
-Enemy LuminBat = new Enemy("Lumin Bat", 40, 40, 5, 10, 1, 75, 10);
-Enemy enemy = new Enemy("enemy", 1, 1, 1, 1, 1, 1, 1);
+
+
+//Enemy MushSlime = new Enemy("Mush Slime", 75, 75, 10, 20, 1, 75, 10);
+//Enemy SkellyShroom = new Enemy("Skelly Shroom", 100, 100, 10, 20, 1, 90, 30);
+//Enemy SwampGoblin = new Enemy("Swamp Goblin", 120, 120, 10, 20, 1, 80, 20);
+//Enemy MossyGolem = new Enemy("Mossy Golem", 140, 140, 10, 20, 1, 80, 10);
+//Enemy LuminBat = new Enemy("Lumin Bat", 40, 40, 5, 10, 1, 75, 10);
+//Enemy enemy = new Enemy("enemy", 1, 1, 1, 1, 1, 1, 1);
 
 
 // FOREST DUNGEON 
@@ -120,7 +121,7 @@ Enemy enemy = new Enemy("enemy", 1, 1, 1, 1, 1, 1, 1);
 String CombatDialog1 = "";
 String CombatDialog2 = "";
 String CombatDialog3 = "";
-String PlayerAction = "";
+String playerAction = "";
 
 //Forest Dungeon ROOMS
 ForestRoom currentRoom = new ForestRoom()
@@ -178,22 +179,20 @@ void ForestDungeonUI()
 
     Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Dialog  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 
-    CombatDialog();
-
-
+    UIService.CombatDialog(CombatDialog1, CombatDialog2, CombatDialog3);
 
     Console.WriteLine($"                                                                          Dungeon Keys: 0       Boss Key: 0  ");
     Console.WriteLine("===============================================  Action Bar  ===============================================");
     Console.WriteLine($"|  (B)asic Attack  [0 MP]                                           (1){ability1}                                    |");
     Console.WriteLine($"|  (S)trong Attack [10 MP]                                          (2){ability2}                                    |");
-    Console.WriteLine($"|  (H)ealth Potion [{HealthPotions}]                                (3){ability3}                                    |");
-    Console.WriteLine($"|  (M)ana Potion   [{ManaPotions}]                                  (4){Uability}                                    |");
+    Console.WriteLine($"|  (H)ealth Potion [{player.HealthPotions}]                                (3){ability3}                                    |");
+    Console.WriteLine($"|  (M)ana Potion   [{player.ManaPotions}]                                  (4){Uability}                                    |");
     Console.WriteLine("============================================================================================================");
     Console.WriteLine("(I)nventory           (D)ungeon Map               (V)endor             (C)haracter               (A)bilities ");
     Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
     Console.WriteLine("Type Action:");
-    PlayerAction = Console.ReadLine();
-    PlayerAction = PlayerAction.ToLower();
+    playerAction = Console.ReadLine();
+    playerAction = playerAction.ToLower();
 
 }
 
@@ -225,40 +224,7 @@ void ForestDungonUiNonCombat()
 }
 
 // Dialog Delay
-void CombatDialog()
-{
-    if (CombatDialog1 != "")
-    {
-        Thread.Sleep(500);
-        Console.WriteLine(CombatDialog1);
-        Thread.Sleep(100);
-    }
-    else
-    {
-        Console.WriteLine(CombatDialog1);
-    }
-    if (CombatDialog2 != "")
-    {
-        Thread.Sleep(500);
-        Console.WriteLine(CombatDialog2);
-        Thread.Sleep(500);
-    }
-    else
-    {
-        Console.WriteLine(CombatDialog2);
-    }
-    if (CombatDialog3 != "")
-    {
-        Thread.Sleep(500);
-        Console.WriteLine(CombatDialog3);
-        Thread.Sleep(500);
-    }
-    else
-    {
 
-        Console.WriteLine(CombatDialog3);
-    }
-}
 
 // combat dialog clear
 void combatDialogClear()
@@ -266,52 +232,16 @@ void combatDialogClear()
     CombatDialog1 = "";
     CombatDialog2 = "";
     CombatDialog3 = "";
-
 }
-
 
 // Pick forest enemy method
 
-void PickForestEnemy()
-{
 
-    int enemyPicker = random.Next(1, 5);
-    if (enemyPicker == 1)
-    {
-
-        enemy = MushSlime;
-    }
-
-    if (enemyPicker == 2)
-    {
-
-        enemy = SwampGoblin;
-    }
-
-    if (enemyPicker == 3)
-    {
-
-        enemy = LuminBat;
-    }
-
-    if (enemyPicker == 4)
-    {
-
-        enemy = SkellyShroom;
-    }
-
-    if (enemyPicker == 5)
-    {
-
-        enemy = MossyGolem;
-    }
-
-}
 
 // INVENTORY SCREEN
 string navInput = "";
 
-PickForestEnemy();
+enemy = GameService.PickForestEnemy();
 
 /////////////////////////////  START OF GAME  ///////////////////////////////////////
 
@@ -329,7 +259,7 @@ void LegendOfBoog()
         enemy.Damage = random.Next(10, 20);
 
         // Basic Attack
-        if (PlayerAction == "b")
+        if (playerAction == "b")
         {
             int roll = random.Next(1, 100);
             if (roll <= player.Weapon.CritRate)
@@ -349,7 +279,7 @@ void LegendOfBoog()
                 CombatDialog2 = $"- The {enemy.Name} attacked, but missed!\n";
                 player.Mana = player.Mana + player.ManaRegenRate;
                 CombatDialog3 = $"- You Regained Mana {player.ManaRegenRate} Mana.";
-                PlayerAction = "z";
+                playerAction = "z";
             }
             else
             {
@@ -367,12 +297,12 @@ void LegendOfBoog()
 
                 player.Mana = player.Mana + player.ManaRegenRate;
                 CombatDialog3 = $"- You Regained Mana {player.ManaRegenRate} Mana.";
-                PlayerAction = "z";
+                playerAction = "z";
             }
         }
 
         // Strong Attack
-        if (PlayerAction == "s" & player.Mana >= 10)
+        if (playerAction == "s" & player.Mana >= 10)
         {
             int roll = random.Next(1, 100);
             if (roll <= player.Weapon.CritRate)
@@ -391,7 +321,7 @@ void LegendOfBoog()
                 CombatDialog2 = $"- The {enemy.Name} attacked, but missed!\n";
                 player.Mana = player.Mana - 10;
                 CombatDialog3 = $"- You used 10 Mana.";
-                PlayerAction = "z";
+                playerAction = "z";
             }
             else
             {
@@ -409,12 +339,12 @@ void LegendOfBoog()
 
                 player.Mana = player.Mana - 10;
                 CombatDialog3 = $"- You used 10 Mana.";
-                PlayerAction = "z";
+                playerAction = "z";
             }
         }
 
         // out of mana for Strong Attack
-        if (PlayerAction == "s" & player.Mana < 10)
+        if (playerAction == "s" & player.Mana < 10)
         {
             CombatDialog1 = "- You do not have enough Mana";
             CombatDialog2 = "";
@@ -422,7 +352,7 @@ void LegendOfBoog()
         }
 
         // Health Potion
-        if (PlayerAction == "h" & HealthPotions > 0)
+        if (playerAction == "h" & player.HealthPotions > 0)
         {
             if (player.Health == player.FullHealth)
             {
@@ -440,8 +370,8 @@ void LegendOfBoog()
                 {
                     CombatDialog2 = "";
                     CombatDialog3 = "";
-                    HealthPotions = HealthPotions - 1;
-                    PlayerAction = "z";
+                    player.HealthPotions = player.HealthPotions - 1;
+                    playerAction = "z";
                 }
                 else
                 {
@@ -458,8 +388,8 @@ void LegendOfBoog()
                     }
 
                     CombatDialog3 = "";
-                    HealthPotions = HealthPotions - 1;
-                    PlayerAction = "z";
+                    player.HealthPotions = player.HealthPotions - 1;
+                    playerAction = "z";
                 }
             }
         }
@@ -471,12 +401,12 @@ void LegendOfBoog()
         }
 
         // health potion cap
-        if (HealthPotions <= 0)
+        if (player.HealthPotions <= 0)
         {
-            HealthPotions = 0;
+            player.HealthPotions = 0;
         }
         // out of Health Potions
-        if (PlayerAction == "h" & HealthPotions <= 0)
+        if (playerAction == "h" & player.HealthPotions <= 0)
         {
             CombatDialog1 = "- You are out of Health Potions";
             CombatDialog2 = "";
@@ -484,7 +414,7 @@ void LegendOfBoog()
         }
 
         // Mana Potion
-        if (PlayerAction == "m" & ManaPotions > 0)
+        if (playerAction == "m" & player.ManaPotions > 0)
         {
             if (player.Mana == player.FullMana)
             {
@@ -502,8 +432,8 @@ void LegendOfBoog()
                 {
                     CombatDialog2 = "";
                     CombatDialog3 = "";
-                    ManaPotions = ManaPotions - 1;
-                    PlayerAction = "z";
+                    player.ManaPotions = player.ManaPotions - 1;
+                    playerAction = "z";
                 }
                 else
                 {
@@ -520,8 +450,8 @@ void LegendOfBoog()
                     }
 
                     CombatDialog3 = "";
-                    ManaPotions = ManaPotions - 1;
-                    PlayerAction = "z";
+                    player.ManaPotions = player.ManaPotions - 1;
+                    playerAction = "z";
                 }
             }
         }
@@ -533,7 +463,7 @@ void LegendOfBoog()
         }
 
         // out of Mana Potions
-        if (PlayerAction == "m" & ManaPotions == 0)
+        if (playerAction == "m" & player.ManaPotions == 0)
         {
             CombatDialog1 = "- You are out of Mana Potions";
             CombatDialog2 = "";
@@ -541,9 +471,9 @@ void LegendOfBoog()
         }
 
         // Mana potion cap
-        if (ManaPotions <= 0)
+        if (player.ManaPotions <= 0)
         {
-            ManaPotions = 0;
+            player.ManaPotions = 0;
         }
         //mana out
 
@@ -557,19 +487,22 @@ void LegendOfBoog()
         {
             int XpGain = random.Next(40, 70);
             int GoldGain = random.Next(10, 30);
-            player.Xp = player.Xp + XpGain;
-            player.Gold = player.Gold + GoldGain;
+            player.Xp += XpGain;
+            player.Gold += GoldGain;
+
             UIService.ClearAll();
             UIService.Header();
-            CombatDialog();
+            UIService.CombatDialog(CombatDialog1, CombatDialog2, CombatDialog3);
             Console.WriteLine($"\n\nThe {enemy.Name} was defeated!! \n\nYou got {XpGain} XP! \n\nYou also found {GoldGain} Gold! \n");
+            
             enemy.Health = enemy.FullHealth;
-            currentRoom.NumOfEnemies = currentRoom.NumOfEnemies - 1;
-            PickForestEnemy();
+            currentRoom.NumOfEnemies--;
+            enemy = GameService.PickForestEnemy();
+
             input.Continue();
             combatDialogClear();
-
         }
+
         // stay alive if you both die
         if (enemy.Health <= 0 & player.Health <= 0)
         {
@@ -578,6 +511,7 @@ void LegendOfBoog()
             Console.WriteLine("\n~ That was a close call... You are ever so sligthly clinging to life");
         }
 
+        var mapDialog = "";
 
         // NON COMBAT LOOP ////////////////
         while (currentRoom.NumOfEnemies == 0)
@@ -588,84 +522,39 @@ void LegendOfBoog()
             if (PlayerAction2 == "2")
             {
                 currentRoom = room2;
+                mapDialog = "You are in Room 2";
             }
-            if (PlayerAction2 == "1")
+            else if (PlayerAction2 == "1")
             {
                 currentRoom = room1;
+                mapDialog = "You are in Room 1";
             }
         }
 
-        String MapDialog = "";
-
-        if (currentRoom == room1)
-        {
-            MapDialog = "You are in Room 1";
-        }
-        if (currentRoom == room2)
-        {
-            MapDialog = "You are in Room 2";
-        }
-
-
         //Forest Dungeon  Map
-        if (PlayerAction == "d")
+        if (playerAction == "d")
         {
-            UIService.Header();
-            Console.WriteLine($"                                         Forest Dungeon                      {MapDialog}\n");
-
-            Console.WriteLine("                                            ======= 8                                                      ");
-            Console.WriteLine("                                            |  B  |                                                        ");
-            Console.WriteLine("                                            |     |                                                        ");
-            Console.WriteLine("                                            === ===                                                        ");
-            Console.WriteLine("                               6 =======      | |      ======= 7                                           ");
-            Console.WriteLine("                                 |     |____=== ===____|     |                                             ");
-            Console.WriteLine("                                 |      ____       ____      |                                             ");
-            Console.WriteLine("                                 =======    |     |    =======                                             ");
-            Console.WriteLine("                                            === === 5                                                      ");
-            Console.WriteLine("                          3 =======___________| |___________======= 4                                      ");
-            Console.WriteLine("                            |      ___________   ___________      |                                        ");
-            Console.WriteLine("                            |     |           | |           |     |                                        ");
-            Console.WriteLine("                            =======         === === 2       =======                                        ");
-            Console.WriteLine("                                            |     |                                                        ");
-            Console.WriteLine("                                            |     |                                                        ");
-            Console.WriteLine("                                            =======                                                        ");
-            Console.WriteLine("                                              | |                                                          ");
-            Console.WriteLine("                                            === === 1                                                      ");
-            Console.WriteLine("                                            |     |                                                        ");
-            Console.WriteLine("                                            |     |                                                        ");
-            Console.WriteLine("                                            ==   ==                                                        ");
-            Console.WriteLine("                                                                                                           ");
-            Console.WriteLine("============================================================================================================");
-
-            Console.WriteLine("Type (B) to go back:");
+            UIService.DungeonMap(mapDialog);
             navInput = Console.ReadLine();
             navInput = navInput.ToLower();
 
             if (navInput == "b")
             {
-                PlayerAction = "z";
+                playerAction = "";
             }
 
         }
 
         // INVENTORY UI
-        if (PlayerAction == "i")
+        if (playerAction == "i")
         {
-            UIService.Header();
-            Console.WriteLine($"                                      {player.Name}'s Inventory ");
-            Console.WriteLine($"Weapon: {player.Weapon.Name} the {player.Weapon.Type} \n");
-            Console.WriteLine($"Health Potions: {HealthPotions}\n");
-            Console.WriteLine($"Mana Potions: {ManaPotions}\n\n");
-            Console.WriteLine($"Gold: {player.Gold}\n\n\n");
-            Console.WriteLine("============================================================================================================");
+            UIService.InventoryMenu(player);
 
-            Console.WriteLine("Type (B) to go back:");
-            navInput = Console.ReadLine();
-            navInput = navInput.ToLower();
+            navInput = Console.ReadLine().ToLower();
 
             if (navInput == "b")
             {
-                PlayerAction = "z";
+                playerAction = "";
             }
         }
 
@@ -738,10 +627,9 @@ void LegendOfBoog()
 
             Console.WriteLine($"Do you want to upgrade Weapon Damage? or Critical Rate? \nType (D) for Weapon Damage (+5 points to min and max Damage) and (C) for Critical Rate (+2 points) ");
             Console.WriteLine("Type Here:");
-            String UpgradeInput2 = Console.ReadLine();
-            UpgradeInput2 = UpgradeInput2.ToLower();
+            string upgradeInput2 = Console.ReadLine().ToLower();
 
-            if (UpgradeInput2 == "d")
+            if (upgradeInput2 == "d")
             {
                 UIService.ClearAll();
                 UIService.Header();
@@ -750,7 +638,7 @@ void LegendOfBoog()
                 Console.WriteLine($" - Your Weapon Damage Range is now {player.Weapon.BaseDamage} - {player.Weapon.MaxDamage}! ");
                 input.Continue();
             }
-            if (UpgradeInput2 == "c")
+            if (upgradeInput2 == "c")
             {
                 UIService.ClearAll();
                 UIService.Header();
@@ -775,7 +663,7 @@ void LegendOfBoog()
         }
 
         // character menue
-        if (PlayerAction == "c")
+        if (playerAction == "c")
         {
             UIService.Header();
 
@@ -792,12 +680,11 @@ void LegendOfBoog()
             Console.WriteLine("(B)ack");
 
             Console.WriteLine("Type Action:");
-            navInput = Console.ReadLine();
-            navInput = navInput.ToLower();
+            navInput = Console.ReadLine().ToLower();
 
             if (navInput == "b")
             {
-                PlayerAction = "z";
+                playerAction = "z";
             }
         }
 
@@ -808,7 +695,7 @@ void LegendOfBoog()
         int StoreLoop = 1;
         String StoreDialog = "";
 
-        if (PlayerAction == "v")
+        if (playerAction == "v")
         {
             while (StoreLoop == 1)
             {
@@ -824,15 +711,12 @@ void LegendOfBoog()
 
                 Console.WriteLine(StoreDialog);
 
-
-
                 Console.WriteLine("\nType the number of the item you want to purchase. Or type (B) to go back.\nType Here:");
-                navInput = Console.ReadLine();
-                navInput = navInput.ToLower();
+                navInput = Console.ReadLine().ToLower();
 
                 if (navInput == "b")
                 {
-                    PlayerAction = "z";
+                    playerAction = "z";
                     StoreLoop = 0;
                 }
 
@@ -843,7 +727,7 @@ void LegendOfBoog()
                 if (navInput == "1" & player.Gold >= 10)
                 {
                     player.Gold = player.Gold - 10;
-                    HealthPotions = HealthPotions + 1;
+                    player.HealthPotions = player.HealthPotions + 1;
                     StoreDialog = "You Purchased a Health Potion for 10 Gold!";
                 }
 
@@ -854,7 +738,7 @@ void LegendOfBoog()
                 if (navInput == "2" & player.Gold >= 10)
                 {
                     player.Gold = player.Gold - 10;
-                    ManaPotions = ManaPotions + 1;
+                    player.ManaPotions = player.ManaPotions + 1;
                     StoreDialog = "You Purchased a Mana Potion for 10 Gold!";
                 }
 
@@ -898,8 +782,9 @@ void LegendOfBoog()
                 }
             }
         }
+
         //ability menu
-        if (PlayerAction == "a")
+        if (playerAction == "a")
         {
             UIService.AbilitiesMenu(player);
 
@@ -907,7 +792,7 @@ void LegendOfBoog()
             navInput = navInput.ToLower();
             if (navInput == "b")
             {
-                PlayerAction = "z";
+                playerAction = "z";
             }
         }
     }

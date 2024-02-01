@@ -32,7 +32,7 @@
             AttackCount = 1;
         }
 
-        public Weapon LightWeapon(string name, string type)
+        public static Weapon LightWeapon(string name, string type)
         {
             return new Weapon(name, type)
             {
@@ -46,7 +46,7 @@
             };
         }
 
-        public Weapon HeavyWeapon(string name, string type)
+        public static Weapon HeavyWeapon(string name, string type)
         {
             return new Weapon(name, type)
             {

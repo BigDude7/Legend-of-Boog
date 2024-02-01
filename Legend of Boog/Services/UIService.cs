@@ -1,7 +1,9 @@
 ﻿using Legend_of_Boog.Models.Characters;
+using Legend_of_Boog.Models.Layout;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -85,19 +87,89 @@ namespace Legend_of_Boog.Services
 
         public static void AbilitiesMenu(Player player)
         {
-            UIService.Header();
+            Header();
             Console.WriteLine($"{player.Class}\nLevel: {player.Level}\n\n");
 
             Console.WriteLine("Ability 1: ????????");
             Console.WriteLine("Ability 2: ????????");
             Console.WriteLine("Ability 3: ????????");
             Console.WriteLine("Ultimate Ability: ????????");
-
             Console.WriteLine("============================================================================================================");
             Console.WriteLine("(B)ack");
 
             Console.WriteLine("Type Action:");
-
         }
+
+        public static void InventoryMenu(Player player)
+        {
+            UIService.Header();
+            Console.WriteLine($"                                      {player.Name}'s Inventory ");
+            Console.WriteLine($"Weapon: {player.Weapon.Name} the {player.Weapon.Type} \n");
+            Console.WriteLine($"Health Potions: {player.HealthPotions}\n");
+            Console.WriteLine($"Mana Potions: {player.ManaPotions}\n\n");
+            Console.WriteLine($"Gold: {player.Gold}\n\n\n");
+            Console.WriteLine("============================================================================================================");
+
+            Console.WriteLine("Type (B) to go back:");
+        }
+
+        public static void DungeonMap(string MapDialog)
+        {
+            UIService.Header();
+            Console.WriteLine($"                                         Forest Dungeon                      {MapDialog}\n");
+
+            Console.WriteLine("                                            ======= 8                                                      ");
+            Console.WriteLine("                                            |  B  |                                                        ");
+            Console.WriteLine("                                            |     |                                                        ");
+            Console.WriteLine("                                            === ===                                                        ");
+            Console.WriteLine("                               6 =======      | |      ======= 7                                           ");
+            Console.WriteLine("                                 |     |____=== ===____|     |                                             ");
+            Console.WriteLine("                                 |      ____       ____      |                                             ");
+            Console.WriteLine("                                 =======    |     |    =======                                             ");
+            Console.WriteLine("                                            === === 5                                                      ");
+            Console.WriteLine("                          3 =======___________| |___________======= 4                                      ");
+            Console.WriteLine("                            |      ___________   ___________      |                                        ");
+            Console.WriteLine("                            |     |           | |           |     |                                        ");
+            Console.WriteLine("                            =======         === === 2       =======                                        ");
+            Console.WriteLine("                                            |     |                                                        ");
+            Console.WriteLine("                                            |     |                                                        ");
+            Console.WriteLine("                                            =======                                                        ");
+            Console.WriteLine("                                              | |                                                          ");
+            Console.WriteLine("                                            === === 1                                                      ");
+            Console.WriteLine("                                            |     |                                                        ");
+            Console.WriteLine("                                            |     |                                                        ");
+            Console.WriteLine("                                            ==   ==                                                        ");
+            Console.WriteLine("                                                                                                           ");
+            Console.WriteLine("============================================================================================================");
+
+            Console.WriteLine("Type (B) to go back:");
+        }
+
+        public static void CombatDialog(string dialog1, string dialog2, string dialog3)
+        {
+            if (dialog1 != "")
+            {
+                Thread.Sleep(500);
+                Console.WriteLine(dialog1);
+                Thread.Sleep(100);
+            }
+
+            if (dialog2 != "")
+            {
+                Thread.Sleep(500);
+                Console.WriteLine(dialog2);
+                Thread.Sleep(500);
+            }
+
+            if (dialog3 != "")
+            {
+                Thread.Sleep(500);
+                Console.WriteLine(dialog3);
+                Thread.Sleep(500);
+            }
+        }
+
     }
+
+
 }

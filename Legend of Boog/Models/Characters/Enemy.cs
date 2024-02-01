@@ -2,7 +2,7 @@
 {
     public class Enemy
     {
-        public string Name;
+        public string Name = string.Empty;
         public int Health;
         public int FullHealth;
         public int BaseDamage;
@@ -10,6 +10,10 @@
         public int Damage;
         public int Accuracy;
         public int CritRate;
+
+        public Enemy()
+        {
+        }
 
         public Enemy(string name, int health, int fullHealth, int baseDamage, int maxDamage, int damage, int accuracy, int critRate)
         {

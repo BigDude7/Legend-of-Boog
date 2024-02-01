@@ -12,18 +12,15 @@ namespace Legend_of_Boog.Models.Characters
         public int FullMana;
         public int ManaPotionValue;
         public int ManaRegenRate;
-        //public int Armor;
+        public int HealthPotions;
+        public int ManaPotions;
         public int Level;
         public string Class = String.Empty;
         public int Xp;
         public int XpNeeded;
         public int Gold;
         public Weapon Weapon = new();
-        //public int Speed;
-        //public string ability1;
-        //public string ability2;
-        //public string ability3;
-        //public string ability4;
+      
 
         public Player(string name)
         {
@@ -35,6 +32,8 @@ namespace Legend_of_Boog.Models.Characters
             Mana = 100;
             FullMana = 100;
             ManaPotionValue = 10;
+            HealthPotions = 3;
+            ManaPotions = 3;
             Level = 1;
             Xp = 0;
             XpNeeded = 100;
