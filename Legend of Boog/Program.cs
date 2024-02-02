@@ -17,7 +17,7 @@ do
     UIService.ClearAll();
     UIService.TitleScreen();
     playerInput = Console.ReadLine() ?? "";
-} while (!input.ValidateInput(playerInput, inputMatcher: "e"));
+} while (!InputService.ValidateInput(playerInput, inputMatcher: "e"));
 
 // check for valid name
 do
@@ -33,7 +33,7 @@ do
     playerInput = Console.ReadLine() ?? "";
     player.Name = playerInput.Trim();     
 
-    isValid = input.ValidateInput(player.Name, maxLength: 25, intCheck: true);
+    isValid = InputService.ValidateInput(player.Name, maxLength: 25, intCheck: true);
 } while (!isValid);
 
 // transition dialog into class selection
@@ -60,38 +60,8 @@ player.Class = playerClass.Name;
 // Choose Weapon
 StoryService.DisplayWeaponIntroduction(player);
 
-string weaponChoice = "";
-
-Console.WriteLine($"\n\n(1) an {playerClass.Weapons[0].Name}?, or would you prefer an (2) {playerClass.Weapons[1].Name}? \ndon't overthink it..... they both perform the same...");
-Console.Write(":");
-weaponChoice = Console.ReadLine();
-
-while (weaponChoice != "1" && weaponChoice != "2")
-{
-    Console.Write($"\nOld Dude: *sigh* Please just choose 1 or 2. It is not that difficult, {player.Name}...\n:");
-    weaponChoice = Console.ReadLine();
-}
-
-player.Weapon = playerClass.Weapons[int.Parse(weaponChoice) - 1];
-    //playerClass.Weapons[int.Parse(weaponChoice) - 1];
-
-// Name your Weapon
-UIService.Header();
-Console.WriteLine("Old Dude: Marvelous choice! Now... What shall you name your mighty weapon?");
-Console.Write("Enter Weapon Name:");
-string weaponNameBad = Console.ReadLine() ?? "";
-string weaponName = weaponNameBad.Trim();
-
-while (input.ValidateInput(weaponName, maxLength: 15, intCheck: true) == false)
-{
-    UIService.Header();
-    Console.WriteLine("\nOld Dude: That Name is horrible...Maybe try something that is NOT a number, or obnoxiously long... do better");
-    Console.Write("Enter Weapon Name:");
-    weaponNameBad = Console.ReadLine() ?? "";
-    weaponName = weaponNameBad.Trim();
-}
-
-player.Weapon.Name = weaponName;
+player.Weapon = GameService.PickWeapon(player, playerClass);
+player.Weapon.Name = GameService.NameWeapon();
 
 // Confirm Character
 UIService.Header();
@@ -106,15 +76,6 @@ input.Continue();
 
 // Forest Dungeon Enemies
 Random random = new Random();
-
-
-//Enemy MushSlime = new Enemy("Mush Slime", 75, 75, 10, 20, 1, 75, 10);
-//Enemy SkellyShroom = new Enemy("Skelly Shroom", 100, 100, 10, 20, 1, 90, 30);
-//Enemy SwampGoblin = new Enemy("Swamp Goblin", 120, 120, 10, 20, 1, 80, 20);
-//Enemy MossyGolem = new Enemy("Mossy Golem", 140, 140, 10, 20, 1, 80, 10);
-//Enemy LuminBat = new Enemy("Lumin Bat", 40, 40, 5, 10, 1, 75, 10);
-//Enemy enemy = new Enemy("enemy", 1, 1, 1, 1, 1, 1, 1);
-
 
 // FOREST DUNGEON 
 

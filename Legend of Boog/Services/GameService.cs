@@ -1,10 +1,10 @@
 ﻿using Legend_of_Boog.Models.Characters;
+using Legend_of_Boog.Models.Items;
 
 namespace Legend_of_Boog.Services
 {
     public static class GameService
     {
-
         private static List<Enemy> enemies = new List<Enemy>
         {
             new Enemy("Mush Slime", 75, 75, 10, 20, 1, 75, 10),
@@ -19,32 +19,8 @@ namespace Legend_of_Boog.Services
             var list = new List<PlayerClass>()
                 {
                     AbilityService.CreateCheezeWizClass(),
-                    //TODO: Create Other Classes in Ability Service and then call the method in here
-
-                    //new PlayerClass
-                    //{
-                    //    Id = 2,
-                    //    Name = "Beast Blade",
-                    //    Description = "",
-                    //    Weapons = new []
-                    //    {
-                    //        "Mountainforge GreatSword",
-                    //        "Dual Shredder Blades"
-                    //    },
-                    //    Abilities = new List<Ability>()
-                    //},
-                    //new PlayerClass
-                    //{
-                    //    Id = 3,
-                    //    Name = "Prismancer Rouge",
-                    //    Description = "",
-                    //    Weapons = new []
-                    //    {
-                    //        "DeathGem Daggers",
-                    //        "Crystalized Shadow-Bow"
-                    //    },
-                    //    Abilities = new List<Ability>()
-                    //}
+                    AbilityService.CreateBeastBladeClass(),
+                    AbilityService.CreatePrismancerRougeClass(),
                 };
 
             return list;
@@ -61,6 +37,41 @@ namespace Legend_of_Boog.Services
             return enemy;
         }
 
+        public static Weapon PickWeapon(Player player, PlayerClass playerClass)
+        {
+            Console.WriteLine($"\n\n(1) an {playerClass.Weapons[0].Name}?, or would you prefer an (2) {playerClass.Weapons[1].Name}? \ndon't overthink it..... they both perform the same...");
+            Console.Write(":");
+            var weaponChoice = Console.ReadLine() ?? "";
+
+            while (weaponChoice != "1" && weaponChoice != "2")
+            {
+                Console.Write($"\nOld Dude: *sigh* Please just choose 1 or 2. It is not that difficult, {player.Name}...\n:");
+                weaponChoice = Console.ReadLine() ?? "";
+            }
+            
+            return playerClass.Weapons[int.Parse(weaponChoice) - 1];
+        }
+
+        public static string NameWeapon()
+        {
+            string weaponName;
+            var isValid = true;
+
+            do {
+                UIService.Header();
+
+                Console.WriteLine(isValid
+                    ? "Old Dude: Marvelous choice! Now... What shall you name your mighty weapon?"
+                    : "\nOld Dude: That Name is horrible...Maybe try something that is NOT a number, or obnoxiously long... do better");
+
+                Console.Write("Enter Weapon Name:");
+                weaponName = Console.ReadLine()?.Trim() ?? "";
+
+                isValid = InputService.ValidateInput(weaponName, maxLength: 15, intCheck: true);
+            } while (!isValid);
+
+            return weaponName;
+        }
 
     }
 }
