@@ -14,6 +14,7 @@ namespace Legend_of_Boog.Services
         {
             return new PlayerClass()
             {
+                Id = 1,
                 Name = "Cheeze Wiz",
                 Description = "Does Cheeze Wiz Stuff",
                 Weapons =

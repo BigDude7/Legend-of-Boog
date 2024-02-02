@@ -62,7 +62,7 @@ StoryService.DisplayWeaponIntroduction(player);
 
 string weaponChoice = "";
 
-Console.WriteLine($"\n\n(1) an {playerClass.Weapons[0]}?, or would you prefer an (2) {playerClass.Weapons[1]}? \ndon't overthink it..... they both perform the same...");
+Console.WriteLine($"\n\n(1) an {playerClass.Weapons[0].Name}?, or would you prefer an (2) {playerClass.Weapons[1].Name}? \ndon't overthink it..... they both perform the same...");
 Console.Write(":");
 weaponChoice = Console.ReadLine();
 
@@ -72,7 +72,8 @@ while (weaponChoice != "1" && weaponChoice != "2")
     weaponChoice = Console.ReadLine();
 }
 
-player.Weapon.Type = playerClass.Weapons[int.Parse(weaponChoice) - 1];
+player.Weapon = playerClass.Weapons[int.Parse(weaponChoice) - 1];
+    //playerClass.Weapons[int.Parse(weaponChoice) - 1];
 
 // Name your Weapon
 UIService.Header();
