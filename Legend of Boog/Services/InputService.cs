@@ -27,7 +27,7 @@ namespace Legend_of_Boog.Services
             Console.Clear();
         }
 
-        public bool ValidateInput(string input, int minLength = 1, int maxLength = 999, string inputMatcher = "", bool intCheck = false)
+        public static bool ValidateInput(string input, int minLength = 1, int maxLength = 999, string inputMatcher = "", bool intCheck = false)
         {
             if (input.Length > maxLength || input.Length < minLength)
             {
@@ -46,5 +46,6 @@ namespace Legend_of_Boog.Services
 
             return true;
         }
+
     }
 }
