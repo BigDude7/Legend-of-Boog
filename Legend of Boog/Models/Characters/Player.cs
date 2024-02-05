@@ -15,7 +15,7 @@ namespace Legend_of_Boog.Models.Characters
         public int HealthPotions;
         public int ManaPotions;
         public int Level;
-        public string Class = String.Empty;
+        public PlayerClass Class = new();
         public int Xp;
         public int XpNeeded;
         public int Gold;

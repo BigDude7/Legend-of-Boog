@@ -73,5 +73,64 @@ namespace Legend_of_Boog.Services
             return weaponName;
         }
 
+        public static string GetPlayerName()
+        {
+            var isValid = true;
+            string name;
+            
+            do
+            {
+                StoryService.DisplayStoryStart();
+
+                if (!isValid)
+                {
+                    Console.WriteLine("Old Dude: Hmm... That name is..... kinda trash...\nMaybe try something that is NOT a number, or obnoxiously long... do better");
+                }
+
+                Console.Write("Enter Name:");
+                name = Console.ReadLine()?.Trim() ?? "";
+
+                isValid = InputService.ValidateInput(name, maxLength: 25, intCheck: true);
+            } while (!isValid);
+
+            return name;
+        }
+
+        public static string Attack(Player player, Enemy enemy, int mana = 0)
+        {
+            var random = new Random();
+            var roll = random.Next(1, 100);
+            player.Mana -= mana;
+            
+            if (roll <= player.Weapon.CritRate)
+            {
+                enemy.Health -= player.Weapon.Damage * 2;
+                return $"- You dealt {player.Weapon.Damage * 2} damage to {enemy.Name}!  *CRITICAL HIT*\n";
+            }
+            
+            enemy.Health -= player.Weapon.Damage;
+            return $"- You dealt {player.Weapon.Damage} damage to {enemy.Name}!\n";
+        }
+
+        public static string EnemyAttack(Player player, Enemy enemy)
+        {
+            var random = new Random();
+            var enemyMissRoll = random.Next(1, 100);
+            
+            if (enemyMissRoll >= enemy.Accuracy)
+            {
+                return $"- The {enemy.Name} attacked, but missed!\n";
+            }
+            
+            var enemyRoll = random.Next(1, 100);
+            if (enemyRoll <= enemy.CritRate)
+            {
+                player.Health -= enemy.Damage * 2;
+                return $"- {enemy.Name} strikes back and hits you for {enemy.Damage * 2} damage! *CRITICAL HIT*\n";
+            }
+            
+            player.Health -= enemy.Damage;
+            return $"- {enemy.Name} strikes back and hits you for {enemy.Damage} damage!\n";
+        }
     }
 }

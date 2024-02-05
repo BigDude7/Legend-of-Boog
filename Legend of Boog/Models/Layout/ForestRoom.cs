@@ -1,6 +1,6 @@
 ﻿namespace Legend_of_Boog.Models.Layout
 {
-    internal class ForestRoom
+    public class ForestRoom
     {
         public int RoomId { get; set; }
         public string EntryDialog { get; set; } = String.Empty;

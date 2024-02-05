@@ -19,8 +19,11 @@ namespace Legend_of_Boog.Services
                 },
                 Abilities =
                 {
+                    //TODO: Fill with Abilities
                     new Ability("Queso Blast", "Does Queso Blast things", 5, 2, 10),
-                    new Ability("Queso Blast 2", "Does Queso Blast things", 5, 2, 10)
+                    new Ability("Queso Blast 2", "Does Queso Blast things", 5, 2, 10),
+                    new Ability("Queso Blast 3", "Does Queso Blast things", 5, 2, 10),
+                    new Ability("Queso Blast 4", "Does Queso Blast things", 5, 2, 10)
                 }
             };
         }
@@ -39,6 +42,9 @@ namespace Legend_of_Boog.Services
                 },
                 Abilities =
                 {
+                    //TODO: Fill with Abilities
+                    new Ability("", "", 5, 2, 10),
+                    new Ability("", "", 5, 2, 10),
                     new Ability("", "", 5, 2, 10),
                     new Ability("", "", 5, 2, 10)
                 }
@@ -59,6 +65,9 @@ namespace Legend_of_Boog.Services
                 },
                 Abilities =
                 {
+                    //TODO: Fill with Abilities
+                    new Ability("", "", 5, 2, 10),
+                    new Ability("", "", 5, 2, 10),
                     new Ability("", "", 5, 2, 10),
                     new Ability("", "", 5, 2, 10)
                 }

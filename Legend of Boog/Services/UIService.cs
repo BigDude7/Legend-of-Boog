@@ -82,7 +82,7 @@ namespace Legend_of_Boog.Services
 
         public static void PlayerRecap(Player player)
         {
-            Console.WriteLine($"Name: {player.Name}\nClass: {player.Class}\nLevel: {player.Level}\n\n\nWeapon: {player.Weapon.Name} the {player.Weapon.Type}\nWeapon Damage Range: {player.Weapon.BaseDamage} - {player.Weapon.MaxDamage} \nWeapon Crit Chance: {player.Weapon.CritRate}%");
+            Console.WriteLine($"Name: {player.Name}\nClass: {player.Class.Name}\nLevel: {player.Level}\n\n\nWeapon: {player.Weapon.Name} the {player.Weapon.Type}\nWeapon Damage Range: {player.Weapon.BaseDamage} - {player.Weapon.MaxDamage} \nWeapon Crit Chance: {player.Weapon.CritRate}%");
         }
 
         public static void AbilitiesMenu(Player player)
@@ -168,7 +168,50 @@ namespace Legend_of_Boog.Services
                 Thread.Sleep(500);
             }
         }
+        
+        public static void ForestDungeonUI(ForestRoom room, Player player, Enemy enemy, string dialog1, string dialog2, string dialog3)
+        {
+            Console.WriteLine("=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~  Forest Dungeon  ~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=");
+            Console.WriteLine($"                                                    Room {room.RoomId}                                        ");
+            Console.WriteLine("       [                                                                                           ]");
+            Console.WriteLine(" @xxxxx{:::::::::::::::::::::::::::>                                   <:::::::::::::::::::::::::::}xxxxx@");
+            Console.WriteLine("       [                                                                                           ]\n");
+            Console.WriteLine($"[{player.Name}] Level: {player.Level} {player.Class.Name}                                                EXP: {player.Xp}/{player.XpNeeded}          Gold:{player.Gold}");
+            Console.WriteLine($"Health: {player.Health}/{player.FullHealth}\nMana: {player.Mana}/{player.FullMana}   \n");
+            Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Enemies  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            Console.WriteLine($"Enemies remaining: {room.NumOfEnemies} / {room.FullNumofEnemies} \n\n");
+            Console.WriteLine($"  [{enemy.Name}] Health:{enemy.Health}\n\n"); ;
 
+            Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Dialog  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+
+            CombatDialog(dialog1, dialog2, dialog3);
+
+            Console.WriteLine($"                                                                          Dungeon Keys: 0       Boss Key: 0  ");
+            Console.WriteLine("===============================================  Action Bar  ===============================================");
+            Console.WriteLine($"|  (B)asic Attack  [0 MP]                                           (1){player.Class.Abilities[0].Name}                                    |");
+            Console.WriteLine($"|  (S)trong Attack [10 MP]                                          (2){player.Class.Abilities[1].Name}                                    |");
+            Console.WriteLine($"|  (H)ealth Potion [{player.HealthPotions}]                                (3){player.Class.Abilities[2].Name}                                    |");
+            Console.WriteLine($"|  (M)ana Potion   [{player.ManaPotions}]                                  (4){player.Class.Abilities[3].Name}                                    |");
+            Console.WriteLine("============================================================================================================");
+            Console.WriteLine("(I)nventory           (D)ungeon Map               (V)endor             (C)haracter               (A)bilities ");
+            Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+            Console.WriteLine("Type Action:");
+        }
+
+        public static void ForestDungeonUiNonCombat(Player player, ForestRoom room)
+        {
+            Console.WriteLine("=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~  Forest Dungeon  ~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=");
+            Console.WriteLine($"                                                    Room {room.RoomId}                                        ");
+            Console.WriteLine("       [                                                                                           ]");
+            Console.WriteLine(" @xxxxx{:::::::::::::::::::::::::::>                                   <:::::::::::::::::::::::::::}xxxxx@");
+            Console.WriteLine("       [                                                                                           ]\n");
+            Console.WriteLine($"[{player.Name}] Level:{player.Level} {player.Class}                                                EXP: {player.Xp}/{player.XpNeeded}");
+            Console.WriteLine($"Health: {player.Health}\nMana: {player.Mana}                                                              Gold: {player.Gold}\n");
+            Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Dialog  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+            Console.WriteLine("Type 2 to enter room 2");
+            Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+            Console.WriteLine("Type Action:");
+        }
     }
 
 
